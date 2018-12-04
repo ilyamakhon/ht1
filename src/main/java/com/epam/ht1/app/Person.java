@@ -14,15 +14,15 @@ public class Person {
     private String id;
     private String name;
     private String surname;
-    private String patronymic;
+    private String middleName;
     private HashMap<String, String> phones = new HashMap<>();
 
     // Конструктор для создания записи о человеке на основе данных из БД.
-    public Person(String id, String name, String surname, String patronymic) {
+    public Person(String id, String name, String surname, String middleName) {
         this.id = id;
         this.name = name;
         this.surname = surname;
-        this.patronymic = patronymic;
+        this.middleName = middleName;
 
         // Извлечение телефонов человека из БД.
         ResultSet db_data = DBWorker.getInstance().getDBData("SELECT * FROM `phone` WHERE `owner`=" + id);
@@ -44,15 +44,15 @@ public class Person {
         this.id = "0";
         this.name = "";
         this.surname = "";
-        this.patronymic = "";
+        this.middleName = "";
     }
 
     // Конструктор для создания записи, предназначенной для добавления в БД.
-    public Person(String name, String surname, String patronymic) {
+    public Person(String name, String surname, String middleName) {
         this.id = "0";
         this.name = name;
         this.surname = surname;
-        this.patronymic = patronymic;
+        this.middleName = middleName;
     }
 
     // ++++++++++++++++++++++++++++++++++++++
@@ -81,16 +81,16 @@ public class Person {
         this.surname = surname;
     }
 
-    public String getPatronymic() {
-        if ((this.patronymic != null) && (!this.patronymic.equals("null"))) {
-            return this.patronymic;
+    public String getMiddleName() {
+        if ((this.middleName != null) && (!this.middleName.equals("null"))) {
+            return this.middleName;
         } else {
             return "";
         }
     }
 
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 
     public void setPhone(String ownerId, String phone) {

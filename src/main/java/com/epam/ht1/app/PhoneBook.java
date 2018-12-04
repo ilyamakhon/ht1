@@ -22,7 +22,7 @@ public class PhoneBook {
             this.persons.put(db_data.getString("id"), new Person(db_data.getString("id"),
                     db_data.getString("name"),
                     db_data.getString("surname"),
-                    db_data.getString("patronymic")));
+                    db_data.getString("middlename")));
         }
     }
 
@@ -53,8 +53,8 @@ public class PhoneBook {
         String query;
 
         // У человека может не быть отчества.
-        if (!person.getPatronymic().equals("")) {
-            query = "INSERT INTO `person` (`name`, `surname`, `patronymic`) VALUES ('" + person.getName() + "', '" + person.getSurname() + "', '" + person.getPatronymic() + "')";
+        if (!person.getMiddleName().equals("")) {
+            query = "INSERT INTO `person` (`name`, `surname`, `middlename`) VALUES ('" + person.getName() + "', '" + person.getSurname() + "', '" + person.getMiddleName() + "')";
         } else {
             query = "INSERT INTO `person` (`name`, `surname`) VALUES ('" + person.getName() + "', '" + person.getSurname() + "')";
         }
@@ -82,7 +82,7 @@ public class PhoneBook {
 
         // У человека может не быть отчества.
         if (!person.getSurname().equals("")) {
-            query = "UPDATE `person` SET `name` = '" + person.getName() + "', `surname` = '" + person.getSurname() + "', `patronymic` = '" + person.getPatronymic() + "' WHERE `id` = " + id_filtered;
+            query = "UPDATE `person` SET `name` = '" + person.getName() + "', `surname` = '" + person.getSurname() + "', `middlename` = '" + person.getMiddleName() + "' WHERE `id` = " + id_filtered;
         } else {
             query = "UPDATE `person` SET `name` = '" + person.getName() + "', `surname` = '" + person.getSurname() + "' WHERE `id` = " + id_filtered;
         }

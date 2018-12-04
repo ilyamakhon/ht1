@@ -45,7 +45,7 @@
         %>
         <tr>
             <td colspan="2" align="center">
-                Информация о телефоне владельца: <%=person.getName()%> <%=person.getSurname()%> <%=person.getPatronymic()%>
+                Информация о телефоне владельца: <%=person.getName()%> <%=person.getSurname()%> <%=person.getMiddleName()%>
             </td>
         </tr>
         <tr>

@@ -60,7 +60,7 @@
         </td>
         <td><%=person.getName()%>
         </td>
-        <td><%=person.getPatronymic()%>
+        <td><%=person.getMiddleName()%>
         </td>
         <td>
             <%

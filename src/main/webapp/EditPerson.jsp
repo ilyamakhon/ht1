@@ -66,7 +66,7 @@
         </tr>
         <tr>
             <td>Отчество:</td>
-            <td><input type="text" name="patronymic" value="<%=person.getPatronymic()%>"/></td>
+            <td><input type="text" name="middleName" value="<%=person.getMiddleName()%>"/></td>
         </tr>
         <tr>
             <tr>
