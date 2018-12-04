@@ -27,41 +27,10 @@ public class ManagePersonServlet extends HttpServlet {
         // Создание экземпляра телефонной книги.
         try {
             this.phonebook = PhoneBook.getInstance();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
 
-    }
-
-    // Валидация ФИО и генерация сообщения об ошибке в случае невалидных данных.
-    private String validatePersonFMLName(Person person) {
-        String error_message = "";
-
-        if (!person.validateFMLNamePart(person.getName(), false)) {
-            error_message += "Имя должно быть строкой от 1 до 150 символов из букв, цифр, знаков подчёркивания и знаков минус.<br />";
-        }
-
-        if (!person.validateFMLNamePart(person.getSurname(), false)) {
-            error_message += "Фамилия должна быть строкой от 1 до 150 символов из букв, цифр, знаков подчёркивания и знаков минус.<br />";
-        }
-
-        if (!person.validateFMLNamePart(person.getMiddleName(), true)) {
-            error_message += "Отчество должно быть строкой от 0 до 150 символов из букв, цифр, знаков подчёркивания и знаков минус.<br />";
-        }
-
-        return error_message;
-    }
-
-
-    public String validatePhoneNumber(String phone) {
-        Matcher matcher = Pattern.compile("^[0-9\\-|+#]{2,50}$").matcher(phone);
-        String error_message = "";
-        if (!matcher.matches()) {
-            error_message = "Неправильный формат номера. Номер должен быть: от 2 до 50 символов: цифра, +, -, #!";
-        }
-        return error_message;
     }
 
     // Реакция на GET-запросы.
@@ -96,6 +65,7 @@ public class ManagePersonServlet extends HttpServlet {
         }
         // Если же действие указано, то...
         else {
+            assert action != null;
             switch (action) {
                 // Добавление записи.
                 case "add":
@@ -236,15 +206,17 @@ public class ManagePersonServlet extends HttpServlet {
         // Действие (add_go, edit_go) и идентификатор записи (id) над которой выполняется это действие.
         String add_go = request.getParameter("add_go");
         String edit_go = request.getParameter("edit_go");
-        String id = request.getParameter("id");
         String add_phone_go = request.getParameter("add_phone_go");
         String edit_phone_go = request.getParameter("edit_phone_go");
 
+        String personId = request.getParameter("id");
+        String phone = request.getParameter("phone");
+        String phoneId = request.getParameter("phoneId");
+
+
         //----------Добавление телефона
         if (add_phone_go != null) {
-            Person person = this.phonebook.getPerson(request.getParameter("id"));
-            String personId = request.getParameter("id");
-            String phone = request.getParameter("phone");
+            Person person = this.phonebook.getPerson(personId);
             String error_message = validatePhoneNumber(phone);
 
             if (error_message.equals("")) {
@@ -280,9 +252,7 @@ public class ManagePersonServlet extends HttpServlet {
 
         //----------Редактирование телефона
         if (edit_phone_go != null) {
-            Person person = this.phonebook.getPerson(request.getParameter("id"));
-            String phoneId = request.getParameter("phoneId");
-            String phone = request.getParameter("phone");
+            Person person = this.phonebook.getPerson(personId);
             String error_message = validatePhoneNumber(phone);
 
             if (error_message.equals("")) {
@@ -322,7 +292,6 @@ public class ManagePersonServlet extends HttpServlet {
         if (add_go != null) {
             // Создание записи на основе данных из формы.
             Person new_person = new Person(request.getParameter("name"), request.getParameter("surname"), request.getParameter("middleName"));
-            System.out.println(new_person.getMiddleName());
             // Валидация ФИО.
             String error_message = this.validatePersonFMLName(new_person);
 
@@ -395,7 +364,6 @@ public class ManagePersonServlet extends HttpServlet {
             }
             // Если в данных были ошибки, надо заново показать форму и сообщить об ошибках.
             else {
-
                 // Подготовка параметров для JSP.
                 jsp_parameters.put("current_action", "edit");
                 jsp_parameters.put("next_action", "edit_go");
@@ -411,5 +379,34 @@ public class ManagePersonServlet extends HttpServlet {
 
             }
         }
+    }
+
+    // Валидация ФИО и генерация сообщения об ошибке в случае невалидных данных.
+    private String validatePersonFMLName(Person person) {
+        String error_message = "";
+
+        if (!person.validateFMLNamePart(person.getName(), false)) {
+            error_message += "Имя должно быть строкой от 1 до 150 символов из букв, цифр, знаков подчёркивания и знаков минус.<br />";
+        }
+
+        if (!person.validateFMLNamePart(person.getSurname(), false)) {
+            error_message += "Фамилия должна быть строкой от 1 до 150 символов из букв, цифр, знаков подчёркивания и знаков минус.<br />";
+        }
+
+        if (!person.validateFMLNamePart(person.getMiddleName(), true)) {
+            error_message += "Отчество должно быть строкой от 0 до 150 символов из букв, цифр, знаков подчёркивания и знаков минус.<br />";
+        }
+
+        return error_message;
+    }
+
+
+    public String validatePhoneNumber(String phone) {
+        Matcher matcher = Pattern.compile("^[0-9\\-|+#]{2,50}$").matcher(phone);
+        String error_message = "";
+        if (!matcher.matches()) {
+            error_message = "Неправильный формат номера. Номер должен быть: от 2 до 50 символов: цифра, +, -, #!";
+        }
+        return error_message;
     }
 }
