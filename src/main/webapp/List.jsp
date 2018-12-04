@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <%@ page import="com.epam.ht1.app.Person" %>
-<%@ page import="com.epam.ht1.app.Phonebook" %>
+<%@ page import="com.epam.ht1.app.PhoneBook" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -13,10 +13,9 @@
 <body>
 
 <%
-    // Phonebook phonebook = Phonebook.getInstance();
-    String user_message;
+    String user_message = "";
     HashMap<String, String> jsp_parameters = new HashMap<>();
-    Phonebook phonebook = (Phonebook) request.getAttribute("phonebook");
+    PhoneBook phonebook = (PhoneBook) request.getAttribute("phonebook");
 
     if (request.getAttribute("jsp_parameters") != null) {
         jsp_parameters = (HashMap<String, String>) request.getAttribute("jsp_parameters");
@@ -39,7 +38,9 @@
     %>
 
     <tr>
-        <td colspan="6" align="center"><a href="<%=request.getContextPath()%>/?action=add">Добавить запись</a></td>
+        <td colspan="6" align="center">
+            <a href="<%=request.getContextPath()%>/?action=add">Добавить запись</a>
+        </td>
     </tr>
     <tr>
         <td align="center"><b>Фамилия</b></td>
@@ -59,7 +60,7 @@
         </td>
         <td><%=person.getName()%>
         </td>
-        <td><%=person.getMiddlename()%>
+        <td><%=person.getPatronymic()%>
         </td>
         <td>
             <%
