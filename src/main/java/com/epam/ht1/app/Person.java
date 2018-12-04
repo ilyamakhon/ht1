@@ -11,18 +11,18 @@ import java.util.regex.Pattern;
 public class Person {
 
     // Данные записи о человеке.
-    private String id = "";
-    private String name = "";
-    private String surname = "";
-    private String middlename = "";
-    private HashMap<String, String> phones = new HashMap<String, String>();
+    private String id;
+    private String name;
+    private String surname;
+    private String patronymic;
+    private HashMap<String, String> phones = new HashMap<>();
 
     // Конструктор для создания записи о человеке на основе данных из БД.
-    public Person(String id, String name, String surname, String middlename) {
+    public Person(String id, String name, String surname, String patronymic) {
         this.id = id;
         this.name = name;
         this.surname = surname;
-        this.middlename = middlename;
+        this.patronymic = patronymic;
 
         // Извлечение телефонов человека из БД.
         ResultSet db_data = DBWorker.getInstance().getDBData("SELECT * FROM `phone` WHERE `owner`=" + id);
@@ -44,28 +44,15 @@ public class Person {
         this.id = "0";
         this.name = "";
         this.surname = "";
-        this.middlename = "";
+        this.patronymic = "";
     }
 
     // Конструктор для создания записи, предназначенной для добавления в БД.
-    public Person(String name, String surname, String middlename) {
+    public Person(String name, String surname, String patronymic) {
         this.id = "0";
         this.name = name;
         this.surname = surname;
-        this.middlename = middlename;
-    }
-
-    // Валидация частей ФИО. Для отчества можно передать второй параетр == true,
-    // тогда допускается пустое значение.
-    public boolean validateFMLNamePart(String fml_name_part, boolean empty_allowed) {
-        if (empty_allowed) {
-            Matcher matcher = Pattern.compile("[\\w-]{0,150}").matcher(fml_name_part);
-            return matcher.matches();
-        } else {
-            Matcher matcher = Pattern.compile("[\\w-]{1,150}").matcher(fml_name_part);
-            return matcher.matches();
-        }
-
+        this.patronymic = patronymic;
     }
 
     // ++++++++++++++++++++++++++++++++++++++
@@ -94,16 +81,20 @@ public class Person {
         this.surname = surname;
     }
 
-    public String getMiddlename() {
-        if ((this.middlename != null) && (!this.middlename.equals("null"))) {
-            return this.middlename;
+    public String getPatronymic() {
+        if ((this.patronymic != null) && (!this.patronymic.equals("null"))) {
+            return this.patronymic;
         } else {
             return "";
         }
     }
 
-    public void setMiddlename(String middlename) {
-        this.middlename = middlename;
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
+    }
+
+    public void setPhone(String ownerId, String phone) {
+        this.phones.put(ownerId, phone);
     }
 
     public HashMap<String, String> getPhones() {
@@ -113,7 +104,22 @@ public class Person {
     public void setPhones(HashMap<String, String> phones) {
         this.phones = phones;
     }
+
+    public String getPhone(String phoneId) {
+        return this.getPhones().get(phoneId);
+    }
     // Геттеры и сеттеры
     // --------------------------------------
 
+    // Валидация частей ФИО. Для отчества можно передать второй параетр == true,
+    // тогда допускается пустое значение.
+    public boolean validateFMLNamePart(String fml_name_part, boolean empty_allowed) {
+        if (empty_allowed) {
+            Matcher matcher = Pattern.compile("[[A-Я][а-я]+\\s[A-Я][а-я]+\\s[A-Я][а-я]+\\w+]{0,150}").matcher(fml_name_part);
+            return matcher.matches();
+        } else {
+            Matcher matcher = Pattern.compile("[[A-Я][а-я]+\\s[A-Я][а-я]+\\s[A-Я][а-я]+\\w+]{1,150}").matcher(fml_name_part);
+            return matcher.matches();
+        }
+    }
 }
